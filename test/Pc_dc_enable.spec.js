@@ -71,8 +71,10 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await page.getByRole('option', { name: 'ON' }).click();
         // enable Post correction daily attestation
         await page.getByRole('button', { name: 'Submit' }).click();
+        console.log("enabled Post correction")
         // enable Daily compliance
         await page.getByRole('row', { name: 'Edit Setting ENABLE DAILY' }).getByRole('img').click();
+        console.log("enable Daily compliance");
         await page.locator('.react-select__input-container').click();
         await page.getByRole('option', { name: 'Enable' }).click();
         await page.getByRole('button', { name: 'Submit' }).click();
@@ -86,28 +88,39 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await page.getByRole('textbox', { name: 'Password' }).fill(kiokspassword);
         await page.getByRole('button', { name: 'Sign in' }).click();
         // status = approved
+        console.log("Approved started completed");
         await kisok_search_login();
         await punchin(page);
         await page.getByRole('button', { name: 'Punchout' }).click();
         await page.waitForTimeout(5000);
         await page.getByRole('button', { name: 'Approve' }).click();
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
+        await page.waitForTimeout(2000);
         await ss(page, 'approved');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
+        await page.waitForTimeout(2000);
         await page.getByText('Logout').click();
+        console.log("Status approved completed");
         // status submit correction
+        console.log("Submit correction started completed");
         await kisok_search_login();
         await punchin(page);
         await page.getByRole('button', { name: 'Punchout' }).click();
         await page.waitForTimeout(5000);
-        await page.waitForTimeout(5000);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.waitForTimeout(2000);
         await page.getByRole('textbox', { name: 'Please leave a comment.*' }).fill('Test');
+        await page.waitForTimeout(2000);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.waitForTimeout(2000);
         await ss(page, 'Sumbit correction');
+        await page.waitForTimeout(2000);
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
+        await page.waitForTimeout(2000);
         await page.getByText('Logout').click();
+        console.log("Sumbit correction completed");
         // status = dealyed meal
+        console.log("delayed meal started");
         await kisok_search_login();
         await feedback(page);
         await page.getByRole('button', { name: 'Punch In' }).click();
@@ -121,7 +134,9 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await ss(page, 'Delayed meal');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
         await page.getByText('Logout').click();
+        console.log("Delayed meal completed");
         // ststus = missing meal
+        console.log("Missing meal started");
         await kisok_search_login();
         await punchin(page);
         await page.waitForTimeout(240000);
@@ -132,9 +147,11 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'missing meal');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
-        await page.getByText('Logout').click(); 
+        await page.getByText('Logout').click();
+        console.log("Missing meal completed");
 
         // status = Force punchout
+        console.log("Force punchout started");
         await kisok_search_login();
         await punchin(page);
         await meal_session(page);
@@ -145,8 +162,10 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await ss(page, 'force punchout');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
         await page.getByText('Logout').click();
+        console.log("Force punchout completed");
         
-        // status = missing punchin force punchout
+        // status = missing meal force punchout
+        console.log("missing meal Force punchout started");
         await kisok_search_login();
         await punchin(page);
         await page.waitForTimeout(480000);// wait for 8 minutes  till punchout
@@ -156,8 +175,9 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await ss(page, 'Missing punchin force punchout');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
         await page.getByText('Logout').click();
-
+        console.log("missing meal Force punchout completed");   
         // status = delayed meal force punchout
+        console.log("delayed meal Force punchout started");
         await kisok_search_login();
         await punchin(page);
         await page.waitForTimeout(240000);// wait for 4 minutes  till punchout
@@ -170,6 +190,7 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await ss(page, 'Delayed meal force punchout');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
         await page.getByText('Logout').click();
+        console.log("delayed meal Force punchout complted");
     }catch (error) {
         console.error('Error in test:', error.message);
     }
