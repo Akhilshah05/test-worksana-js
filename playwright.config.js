@@ -1,5 +1,4 @@
 const { defineConfig } = require('@playwright/test');
-
 module.exports = defineConfig({
     timeout: 6000000, // Global test timeout
     reporter: [['html', { outputFolder: 'playwright-report' }]], // Enables HTML reporting

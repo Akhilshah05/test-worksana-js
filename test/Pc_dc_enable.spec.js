@@ -50,11 +50,10 @@ async function punchin(page) {
         console.error(error.message);
     }
 }
-test('Post correction and daily compliance enabled', async ({ page }) =>{
-    const username = "amrit.shah+9898@thoughts2binary.com";
-    const password = "Test@121";
-    // Go to the login page
+async function system_setting(page) {
     try {
+        const username = "amrit.shah+9898@thoughts2binary.com";
+        const password = "Test@121";
         await page.goto('https://admin-staging.worksana.com/accounts/login');
         await page.getByPlaceholder('Email Address/Username').fill(username);
         await page.getByPlaceholder('Password').fill(password);
@@ -81,6 +80,15 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         await ss(page, 'System settings');
         await page.getByRole('link', { name: 'Company logo amrit.shah+9898@' }).click();
         // await page.getByRole('menuitem', { name: 'Logout' }).click();
+    } catch (error) {
+        console.error('Error in system_setting:', error.message);
+    }
+}
+test('Post correction and daily compliance enabled', async ({ page }) =>{
+    
+    // Go to the login page
+    try {
+        await system_setting(page);
         const kioskusername = "1195-nojob";
         const kiokspassword = "Test@121";
         await page.goto('https://kiosk-staging.worksana.com/accounts/login')
