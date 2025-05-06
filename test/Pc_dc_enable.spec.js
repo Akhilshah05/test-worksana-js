@@ -84,17 +84,24 @@ async function system_setting(page) {
         console.error('Error in system_setting:', error.message);
     }
 }
-test('Post correction and daily compliance enabled', async ({ page }) =>{
-    
-    // Go to the login page
+async function login_kiosk_admin(page) {
     try {
-        await system_setting(page);
         const kioskusername = "1195-nojob";
         const kiokspassword = "Test@121";
         await page.goto('https://kiosk-staging.worksana.com/accounts/login')
         await page.getByRole('textbox', { name: 'Username' }).fill(kioskusername);
         await page.getByRole('textbox', { name: 'Password' }).fill(kiokspassword);
         await page.getByRole('button', { name: 'Sign in' }).click();
+    } catch (error) {
+        console.error('Error in login_kiosk_admin:', error.message);
+    }
+}
+test('Post correction and daily compliance enabled', async ({ page }) =>{
+    
+    // Go to the login page
+    try {
+        await system_setting(page);
+        await login_kiosk_admin(page);
         // status = approved
         console.log("Approved started completed");
         await kisok_search_login(page);

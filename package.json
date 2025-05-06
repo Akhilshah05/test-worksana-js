@@ -10,6 +10,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@playwright/test": "^1.52.0"
+    "@playwright/test": "^1.52.0",
+    "csv-parser": "^3.2.0",
+    "fs": "^0.0.1-security",
+    "playwright": "^1.52.0"
   }
 }
