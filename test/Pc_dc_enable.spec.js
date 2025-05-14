@@ -14,6 +14,7 @@ async function kisok_search_login(page) {
         await page.waitForTimeout(7000);
     } catch (error) {
         console.error(error.message);
+        await catchsteps(page);
     }
 }
 async function feedback(page) {
@@ -22,6 +23,7 @@ async function feedback(page) {
         await page.getByRole('button', { name: 'Close Modal' }).click();
     } catch (error) {
         console.error(error.message);
+        await catchsteps(page);
     }
 }    
 async function meal_session(page) {
@@ -39,6 +41,7 @@ async function ss(page, stepName) {
         await page.screenshot({ path: fileName, fullPage: true });
     } catch (error) {   
         console.error('Error taking screenshot:', error.message);
+        await catchsteps(page);
     }   
 }
 async function punchin(page) {
@@ -48,6 +51,7 @@ async function punchin(page) {
         await page.getByRole('button', { name: 'Punch In' }).click();
     } catch (error) {
         console.error(error.message);
+        await catchsteps(page);
     }
 }
 async function system_setting(page) {
@@ -82,6 +86,7 @@ async function system_setting(page) {
         // await page.getByRole('menuitem', { name: 'Logout' }).click();
     } catch (error) {
         console.error('Error in system_setting:', error.message);
+        await catchsteps(page);
     }
 }
 async function login_kiosk_admin(page) {
@@ -94,7 +99,14 @@ async function login_kiosk_admin(page) {
         await page.getByRole('button', { name: 'Sign in' }).click();
     } catch (error) {
         console.error('Error in login_kiosk_admin:', error.message);
+        await catchsteps(page);
     }
+}
+async function catchsteps(page) {
+    await page.getByRole('button', { name: 'Submit Correction' }).click();
+    await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+    await ss(page, 'missing meal');
+    await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
 }
 test('Post correction and daily compliance enabled', async ({ page }) =>{
     
@@ -208,5 +220,6 @@ test('Post correction and daily compliance enabled', async ({ page }) =>{
         console.log("delayed meal Force punchout complted");
     }catch (error) {
         console.error('Error in test:', error.message);
+        await catchsteps(page);
     }
     });

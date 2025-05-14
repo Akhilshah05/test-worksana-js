@@ -14,6 +14,9 @@ async function kisok_search_login(page) {
         await page.waitForTimeout(7000);
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+        
     }
 }
 async function feedback(page) {
@@ -22,6 +25,8 @@ async function feedback(page) {
         await page.getByRole('button', { name: 'Close Modal' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     }
 }    
 async function meal_session(page) {
@@ -30,6 +35,8 @@ async function meal_session(page) {
         await page.getByRole('button', { name: 'End Meal Break' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     }
 }
 async function ss(page, stepName) {
@@ -39,6 +46,8 @@ async function ss(page, stepName) {
         await page.screenshot({ path: fileName, fullPage: true });
     } catch (error) {   
         console.error('Error taking screenshot:', error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     }   
 }
 async function punchin(page) {
@@ -48,6 +57,8 @@ async function punchin(page) {
         await page.getByRole('button', { name: 'Punch In' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     }
 }
 test('Post correction disable and daily compliance enabled', async ({ page }) =>{
@@ -161,5 +172,7 @@ test('Post correction disable and daily compliance enabled', async ({ page }) =>
         await page.getByText('Logout').click();
     }catch (error) {
         console.error('Error in test:', error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     }
     });

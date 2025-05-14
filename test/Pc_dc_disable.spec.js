@@ -14,6 +14,7 @@ async function kisok_search_login(page) {
         await page.waitForTimeout(7000);
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }
 async function feedback(page) {
@@ -22,6 +23,7 @@ async function feedback(page) {
         await page.getByRole('button', { name: 'Close Modal' }).click();
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }    
 async function meal_session(page) {
@@ -39,6 +41,7 @@ async function ss(page, stepName) {
         await page.screenshot({ path: fileName, fullPage: true });
     } catch (error) {   
         console.error('Error taking screenshot:', error.message);
+        await errorsteps(page);
     }   
 }
 async function punchin(page) {
@@ -48,6 +51,7 @@ async function punchin(page) {
         await page.getByRole('button', { name: 'Punch In' }).click();
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }
 async function punchout_and_submitcorrection(page) {
@@ -58,7 +62,13 @@ async function punchout_and_submitcorrection(page) {
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
+    
+}
+async function errorsteps(page) {
+    await page.getByRole('button', { name: 'Submit Correction' }).click();
+    await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
     
 }
 test('Post correction and daily compliance disabled', async ({ page }) =>{
@@ -171,5 +181,6 @@ test('Post correction and daily compliance disabled', async ({ page }) =>{
         await page.getByText('Logout').click();
     }catch (error) {
         console.error('Error in test:', error.message);
+        await errorsteps(page);
     }
     });

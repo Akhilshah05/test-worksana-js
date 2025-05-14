@@ -14,6 +14,7 @@ async function kisok_search_login(page) {
         await page.waitForTimeout(7000);
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }
 async function feedback(page) {
@@ -22,6 +23,7 @@ async function feedback(page) {
         await page.getByRole('button', { name: 'Close Modal' }).click();
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }    
 async function meal_session(page) {
@@ -32,6 +34,7 @@ async function meal_session(page) {
         await page.waitforselector('button', { name: 'Punchout' });
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
 }
 async function ss(page, stepName) {
@@ -41,6 +44,7 @@ async function ss(page, stepName) {
         await page.screenshot({ path: fileName, fullPage: true });
     } catch (error) {   
         console.error('Error taking screenshot:', error.message);
+        await errorsteps(page);
     }   
 }
 async function punchin(page) {
@@ -52,7 +56,14 @@ async function punchin(page) {
 
     } catch (error) {
         console.error(error.message);
+        await errorsteps(page);
     }
+}
+async function errorsteps(page) {
+    await page.getByRole('button', { name: 'Submit Correction' }).click();
+    await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+    await ss(page, 'Delayed meal');
+    await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
 }
 test('Post correction enable and daily compliance disable', async ({ page }) =>{
     const username = "amrit.shah+9898@thoughts2binary.com";
@@ -173,5 +184,6 @@ test('Post correction enable and daily compliance disable', async ({ page }) =>{
         await page.getByText('Logout').click();
     }catch (error) {
         console.error('Error in test:', error.message);
+        await errorsteps(page);
     }
     });

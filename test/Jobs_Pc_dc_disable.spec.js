@@ -54,7 +54,15 @@ async function punchin(page) {
         console.error(error.message);
     }
 }
-test('Post correction and daily compliance disable', async ({ page }) =>{
+async function punchout(page) {
+    try{
+        await page.getByRole('button', { name: 'Punchout' }).click();
+        await page.waitForTimeout(5000);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+async function System_settings(page) {
     const username = "amrit.shah+9898@thoughts2binary.com";
     const password = "Test@121";
     // Go to the login page
@@ -82,18 +90,32 @@ test('Post correction and daily compliance disable', async ({ page }) =>{
         await page.getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'System settings');
         await page.getByRole('link', { name: 'Company logo amrit.shah+9898@' }).click();
-        // await page.getByRole('menuitem', { name: 'Logout' }).click();
+    } catch (error){
+        console.error('error in system settings:', error.message);
+    }
+}
+async function kiosk_login(page){
+    try {
         const kioskusername = "1195-nojob";
         const kiokspassword = "Test@121";
         await page.goto('https://kiosk-staging.worksana.com/accounts/login')
         await page.getByRole('textbox', { name: 'Username' }).fill(kioskusername);
         await page.getByRole('textbox', { name: 'Password' }).fill(kiokspassword);
         await page.getByRole('button', { name: 'Sign in' }).click();
+    } catch (error) {
+        console.error('Error in kiosk login:', error.message);
+    }          
+}
+test('Post correction and daily compliance disable', async ({ page }) =>{
+    
+    try {
+        await System_settings(page);
+        // await page.getByRole('menuitem', { name: 'Logout' }).click();
+        await kiosk_login(page);
         // status = approved
         await kisok_search_login(page);
         await punchin(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Approve' }).click();
         await ss(page, 'approved');
         await page.getByText('Logout').click();
@@ -101,8 +123,7 @@ test('Post correction and daily compliance disable', async ({ page }) =>{
         debugger;
         await kisok_search_login(page);
         await punchin(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await kisok_search_login(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.getByRole('textbox', { name: 'Please leave a comment.*' }).fill('Test');
@@ -115,19 +136,17 @@ test('Post correction and daily compliance disable', async ({ page }) =>{
         await page.waitForTimeout(240000); // wait for 4 minutes till punchout
         await kisok_search_login(page);
         await meal_session(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'Delayed meal');
         await page.getByText('Logout').click();
-        // ststus = missing meal
+        // status = missing meal
         await kisok_search_login(page);
         await punchin(page);
         await page.waitForTimeout(240000);
         await kisok_search_login(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'missing meal');

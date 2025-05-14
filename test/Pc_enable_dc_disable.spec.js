@@ -14,6 +14,9 @@ async function kisok_search_login(page) {
         await page.waitForTimeout(7000);
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }
 }
 async function feedback(page) {
@@ -22,6 +25,9 @@ async function feedback(page) {
         await page.getByRole('button', { name: 'Close Modal' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }
 }    
 async function meal_session(page) {
@@ -30,6 +36,9 @@ async function meal_session(page) {
         await page.getByRole('button', { name: 'End Meal Break' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }
 }
 async function ss(page, stepName) {
@@ -39,6 +48,9 @@ async function ss(page, stepName) {
         await page.screenshot({ path: fileName, fullPage: true });
     } catch (error) {   
         console.error('Error taking screenshot:', error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await ss(page, 'Sumbit correction');
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }   
 }
 async function punchin(page) {
@@ -48,8 +60,27 @@ async function punchin(page) {
         await page.getByRole('button', { name: 'Punch In' }).click();
     } catch (error) {
         console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await ss(page, 'Sumbit correction');
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }
 }
+async function punchout(page) {
+    try {
+        await punchout(page);
+        await page.evaluate(() => {
+            const audio = new Audio('C:\Users\akhil\OneDrive\Desktop\test-worksana-js\alarm-327234.mp3');
+            audio.play();
+        }
+        );
+        
+    } catch (error) {
+        console.error(error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await ss(page, 'Sumbit correction');
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
+    }
+}                      
 test('Post correction Enable and daily compliance Disabled', async ({ page }) =>{
     const username = "amrit.shah+9898@thoughts2binary.com";
     const password = "Test@121";
@@ -88,8 +119,7 @@ test('Post correction Enable and daily compliance Disabled', async ({ page }) =>
         // status = approved
         await kisok_search_login(page);
         await punchin(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Approve' }).click();
         await ss(page, 'approved');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
@@ -97,23 +127,21 @@ test('Post correction Enable and daily compliance Disabled', async ({ page }) =>
         // status submit correction
         await kisok_search_login(page);
         await punchin(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.getByRole('textbox', { name: 'Please leave a comment.*' }).fill('Test');
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await ss(page, 'Sumbit correction');
         await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
         await page.getByText('Logout').click();
-        // status = dealyed meal
+        //status = dealyed meal
         await kisok_search_login(page);
         await feedback(page);
         await page.getByRole('button', { name: 'Punch In' }).click();
         await page.waitForTimeout(240000); // wait for 4 minutes till punchout
         await kisok_search_login(page);
         await meal_session(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'Delayed meal');
@@ -124,8 +152,7 @@ test('Post correction Enable and daily compliance Disabled', async ({ page }) =>
         await punchin(page);
         await page.waitForTimeout(240000);
         await kisok_search_login(page);
-        await page.getByRole('button', { name: 'Punchout' }).click();
-        await page.waitForTimeout(5000);
+        await punchout(page);
         await page.getByRole('button', { name: 'Submit Correction' }).click();
         await page.locator('#feedback_iframe').contentFrame().getByRole('button', { name: 'Submit' }).click();
         await ss(page, 'missing meal');
@@ -170,5 +197,8 @@ test('Post correction Enable and daily compliance Disabled', async ({ page }) =>
         await page.getByText('Logout').click();
     }catch (error) {
         console.error('Error in test:', error.message);
+        await page.getByRole('button', { name: 'Submit Correction' }).click();
+        await ss(page, 'Sumbit correction');
+        await page.getByRole('button', { name: 'I approve my shiftSite Name' }).click();
     }
     });
